@@ -26,15 +26,16 @@ Mostly specific to Mac OS X but should work on Windows and Linux as well.
 - install [Docker Compose](https://docs.docker.com/compose/install/)
 - create a Docker Machine (I use beedemo-local as `{machine_name}`)
   - `docker-machine create --driver=virtualbox --virtualbox-memory=4096 {machine_name}`
+  - `docker-machine create --driver=virtualbox --virtualbox-memory=4096 beedemo-local`
   - set env for newly created machine: `eval "$(docker-machine env)"`
 - replace vboxfs (VirtualBox share) /Users share with nfs share
   - Create NFS share on Mac OS X side:
-    - create exports file: `sudo vi /etc/exports` with contents (IP used here is your `docker-machine ip {machine_name}`): `/Users 192.168.99.100 -alldirs -mapall={your_username}`
+    - create exports file: `sudo vi /etc/exports` with contents (IP used here is your `docker-machine ip beedemo-local`): `/Users 192.168.99.100 -alldirs -mapall={your_username}`
     - restart nfsd: `sudo nfsd restart`
   - Setup Docker Machine nfs:
-    - Get IP of you VBox for the Docker host you are updating: `VBoxManage showvminfo {machine_name} --machinereadable | grep hostonlyadapter`
+    - Get IP of you VBox for the Docker host you are updating: `VBoxManage showvminfo beedemo-local --machinereadable | grep hostonlyadapter`
     - Run the following command to get the IPAddress for the VBox Network Adapter that matches the name from above: `VBoxManage list hostonlyifs`
-	- ssh into machine: `docker-machine ssh {machine_name}`
+	- ssh into machine: `docker-machine ssh beedemo-local`
     - Add a bootlocal script to your Docker Machine to start the NFS service on boot:
       - `sudo vi /var/lib/boot2docker/bootlocal.sh`
         
